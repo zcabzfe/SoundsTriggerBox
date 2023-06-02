@@ -11,7 +11,7 @@ To run SoundsTriggerBox service:
 
 3. Run the main.py.
 
-4. Enter correct twilio account details
+4. Enter correct twilio account details (If you do not have a twilio account follow this guide from 2:01 to 3:00: https://www.youtube.com/watch?v=ywH2rsL371Q
 
 5. Follow instructionsto Train your sound profile 
 
