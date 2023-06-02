@@ -1,9 +1,16 @@
 # SoundsTriggerBox
 
-To run SoundsTriggerBox program:
+To run SoundsTriggerBox service:
 
 1. Make sure you have Python installed. If not yet, install python by following this guide: https://realpython.com/installing-python/
 
 2. Install requirements.txt. Run pip install -r requirements.txt in terminal.
 
 3. Run the main.py.
+
+4. Enter correct twilio account details
+
+5. Follow instructionsto Train your sound profile 
+
+6. Start SoundTriggerBox Service (Say "stop" or click on "Stop SoundTriggerBox Service" to stop the service or "Quit" to quit the program)
+
