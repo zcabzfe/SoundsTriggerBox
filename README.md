@@ -7,11 +7,11 @@ To run SoundsTriggerBox service:
 
 1. Make sure you have Python installed. If not yet, install python by following this guide: https://realpython.com/installing-python/
 
-2. Install requirements.txt. Run pip install -r requirements.txt in terminal.
+2. Install requirements.txt. Run pip install -r requirements.txt in terminal.(To download a particular package, such as Vosk, simply enter "pip install vosk" into your command prompt or terminal. This will automatically download the latest version of the package, irrespective of the version specified.)
 
 3. Run the main.py.
 
-4. Enter correct twilio account details (If you do not have a twilio account follow this guide from 2:01 to 3:00: https://www.youtube.com/watch?v=ywH2rsL371Q
+4. Enter correct twilio account details (If you do not have a twilio account follow this guide from 2:01 to 3:00: https://www.youtube.com/watch?v=ywH2rsL371Q)
 
 5. Follow instructionsto Train your sound profile 
 
