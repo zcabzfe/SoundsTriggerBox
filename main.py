@@ -21,7 +21,7 @@ class Controller:
         self.my_application = MyApplication(root, self)
         self.trained_sounds_counter = 0
         self.if_logged_in()
-        self.running_thread = None  # new line to keep track of running thread
+        self.running_thread = None  # keep track of running thread
         self.trained_sounds = set()
 
     def if_logged_in(self):
@@ -198,7 +198,10 @@ class Controller:
         self.switch_to_interface("train")
 
     def switch_to_interface(self, interface_name):
-        if interface_name == "train":
+        if interface_name == "twilio":
+            self.my_application.clear_interface()
+            self.my_application.initialize_twilio_details_interface()
+        elif interface_name == "train":
             self.my_application.clear_interface()
             self.my_application.initialize_train_default_sounds_interface()
         else:
