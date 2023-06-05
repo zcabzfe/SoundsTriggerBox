@@ -1,6 +1,7 @@
 # main.py
 # The following python file is based on the techniques found at:
 # https://realpython.com/python-gui-tkinter/
+# https://realpython.com/inner-functions-what-are-they-good-for/
 
 import tkinter as tk
 import os
