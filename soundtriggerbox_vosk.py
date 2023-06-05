@@ -10,7 +10,6 @@ import noisereduce as nr
 
 
 global running
-running = True
 
 
 def reset_recognizer(model):

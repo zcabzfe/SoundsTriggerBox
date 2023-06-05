@@ -30,13 +30,12 @@ def load_json(name):
             raise FileNotFoundError(f"No such file or directory: '{name}'")
 
 
-
 def save_json(config, name):
     with open(name, 'w') as f:
         json.dump(config, f, indent=2)
 
 
-def update_user_made_sounds(key, sub_key, value, name):
+def update_user_made_sounds(key, sub_key, value):
     config = load_json('config.json')
     config['user_made_sounds'][key][sub_key] = value
     save_json(config, 'config.json')
@@ -44,7 +43,8 @@ def update_user_made_sounds(key, sub_key, value, name):
 
 def clear_user_made_sounds():
     config = load_json('config.json')
-    config['user_made_sounds'] = {
+
+    config[str('user_made_sounds')] = {
         "trigger_words": {},
         "sound_pattern": {}
     }
