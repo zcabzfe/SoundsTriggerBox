@@ -16,6 +16,7 @@ def reset_recognizer(model):
     return KaldiRecognizer(model, 16000)
 
 
+# This code is adapted from https://pypi.org/project/noisereduce/
 def record_background_noise(stream, frame_length, seconds=1):
     background_noise = b''
     for _ in range(0, int(16000 / frame_length * seconds)):
@@ -23,6 +24,9 @@ def record_background_noise(stream, frame_length, seconds=1):
     return np.frombuffer(background_noise, dtype=np.int16)
 
 
+# The function `run_soundtriggerbox_vosk` initializes a Vosk model and
+# Opens a PyAudio stream for real-time speech recognition.
+# This code has been adapted from https://www.youtube.com/watch?v=3Mga7_8bYpw.
 def run_soundtriggerbox_vosk():
     global running
     running = True
@@ -52,9 +56,11 @@ def run_soundtriggerbox_vosk():
         audio_data = np.frombuffer(data, dtype=np.int16)
 
         # Apply noise reduction using noisereduce
+        # This code is adapted from https://pypi.org/project/noisereduce/
         audio_data_denoised = nr.reduce_noise(y=audio_data, y_noise=background_noise, sr=16000)
 
         # Transcribe audio data to text
+        # This code is adapted from https://github.com/alphacep/vosk-api/blob/master/python/example/test_gradio.py
         recognizer.AcceptWaveform(audio_data_denoised.tobytes())
         text = recognizer.PartialResult()
         result_json = json.loads(text)
@@ -66,13 +72,13 @@ def run_soundtriggerbox_vosk():
 
         current_time = time.time()
         if signal != 0:
+            # stop the program
+            if signal == 2:
+                stop_sound_trigger()
+                return
+
             if last_trigger_time is None or current_time - last_trigger_time >= debounce_time:
                 last_trigger_time = current_time
-
-                # stop the program
-                if signal == 2:
-                    stop_sound_trigger()
-                    return
 
                 soundtrigger.SoundTriggering(signal)
                 recognizer = reset_recognizer(model)  # Reset the recognizer after triggering

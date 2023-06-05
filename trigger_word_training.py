@@ -1,4 +1,7 @@
 # trigger_word_training.py
+# This python file is implemented based on vowel_recognition.py as described in
+# Emily Pulford's Sound Recognition Project.
+# For more infomation, check https://github.com/pulfdev/Sound_Recognition/blob/main/vowel_recognition.py
 
 import pyaudio
 from statistics import mode, StatisticsError

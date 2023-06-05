@@ -1,3 +1,7 @@
+# main.py
+# The following python file is based on the techniques found at:
+# https://realpython.com/python-gui-tkinter/
+
 import tkinter as tk
 import os
 import re
@@ -57,20 +61,6 @@ class Controller:
             self.my_application.start_soundtriggerbox_vosk_button.config(state=tk.NORMAL)
         else:
             self.my_application.start_soundtriggerbox_vosk_button.config(state=tk.DISABLED)
-
-    def enable_service(self):
-        self.my_application.clear_interface()
-        self.my_application.twilio_details_interface = self.my_application.create_twilio_details_interface()
-
-    def disable_service(self):
-        self.sound_trigger_instance.stop_sound_trigger()
-        if self.running_thread is not None and self.running_thread.is_alive():
-            self.running_thread.join()  # join running thread to stop it
-        self.my_application.root.quit()
-
-    def move_to_training(self):
-        self.my_application.clear_interface()
-        self.my_application.train_default_sounds_interface = self.my_application.create_train_default_sounds_interface()
 
     def save_details(self):
         account_sid = self.my_application.account_sid_entry.get().strip()
@@ -160,10 +150,6 @@ class Controller:
 
         threading.Thread(target=run_training).start()
 
-    def move_to_main(self):
-        self.my_application.clear_interface()
-        self.my_application.main_interface = self.my_application.create_main_interface()
-
     # Start SoundsTriggerBox Service
     def run_soundtriggerbox_vosk(self):
         self.my_application.start_soundtriggerbox_vosk_button['text'] = 'Stop SoundTriggerBox-Service'
@@ -198,11 +184,20 @@ class Controller:
             self.my_application.start_soundtriggerbox_vosk_button['state'] = tk.NORMAL  # enable button
             self.running_thread = None
 
+    def disable_service(self):
+        self.sound_trigger_instance.stop_sound_trigger()
+        if self.running_thread is not None and self.running_thread.is_alive():
+            self.running_thread.join()  # join running thread to stop it
+        self.my_application.root.quit()
+
+    def move_to_main(self):
+        self.switch_to_interface("main")
+
+    def move_to_training(self):
+        self.switch_to_interface("train")
+
     def switch_to_interface(self, interface_name):
-        if interface_name == "twilio":
-            self.my_application.clear_interface()
-            self.my_application.initialize_twilio_details_interface()
-        elif interface_name == "train":
+        if interface_name == "train":
             self.my_application.clear_interface()
             self.my_application.initialize_train_default_sounds_interface()
         else:
