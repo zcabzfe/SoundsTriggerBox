@@ -16,6 +16,7 @@ def SoundDetection(text):
         return 0
 
 
+# This code is adapted from https://www.twilio.com/docs/libraries/python
 def SoundTriggering(signal):
     if signal == 1:
         twilio_details = load_json('twilio_account_details.json')
