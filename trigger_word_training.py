@@ -59,4 +59,3 @@ def train_sounds(sound_name, number, sys_mode):
         update_user_made_sounds("trigger_words", sound_name, most_frequent_word)  # TO DO: create user_made_sounds_dict
     else:
         print("Invalid system mode. Please try again.")
-
