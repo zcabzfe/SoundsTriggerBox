@@ -1,5 +1,6 @@
-twilio==6.63.5
-vosk==0.3.21
-pyaudio==0.2.11
-numpy==1.21.2
-noisereduce==1.1.0
+twilio
+vosk
+pyaudio
+numpy
+noisereduce
+
