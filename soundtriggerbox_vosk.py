@@ -45,7 +45,7 @@ def run_soundtriggerbox_vosk():
     debounce_time = 10.0  # Time in seconds to wait before processing the trigger
     last_trigger_time = None
 
-    reset_interval = 60.0  # Time in seconds to reset the recognizer if no trigger detected
+    reset_interval = 30.0  # Time in seconds to reset the recognizer if no trigger detected
     last_reset_time = time.time()
 
     while running:
