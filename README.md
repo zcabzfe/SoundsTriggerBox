@@ -7,7 +7,7 @@ To run SoundsTriggerBox service:
 
 2. Make sure you have Python installed. If not, please install python by following this guide: https://realpython.com/installing-python/
 
-3. Install requirements.txt. Run "pip install -r requirements.txt" in terminal.(To download a particular package, such as Vosk, simply enter "pip install vosk" into your command prompt or terminal. This will automatically download the latest version of the package, irrespective of the version specified.)
+3. Install requirements.txt. Run "pip install -r requirements.txt" in the terminal.(To download a particular package, such as Vosk, simply enter "pip install vosk" into your command prompt or terminal. This will automatically download the latest version of the package, irrespective of the version specified.)
 
 4. Check your microphone status and give Python access to your microphone:
 
