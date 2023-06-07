@@ -4,6 +4,7 @@
 # https://realpython.com/inner-functions-what-are-they-good-for/
 # https://realpython.com/intro-to-python-threading/
 
+# import psutil
 import tkinter as tk
 import os
 import re
@@ -355,6 +356,17 @@ class MyApplication:
 
 
 if __name__ == "__main__":
+
+    # Connect the program with the last E cores on a 12 gen intel cpu
+    # Make sure you have "psutil" library pip installed.
+    # Code:
+    #
+    # Core_counter = psutil.cpu_count()
+    #
+    # processID = psutil.Process().pid
+    # print("Current PID: ", processID)
+    # p = psutil.Process(processID).cpu_affinity([Core_counter - 1])
+
     root = tk.Tk()
     root.geometry("800x600")
     app = Controller(root)
