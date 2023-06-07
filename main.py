@@ -359,7 +359,7 @@ if __name__ == "__main__":
 
     # Connect the program with the last E cores on a 12 gen intel cpu
     # Make sure you have "psutil" library pip installed.
-    # Code:
+    # Code provided by James Bown:
     #
     # Core_counter = psutil.cpu_count()
     #
