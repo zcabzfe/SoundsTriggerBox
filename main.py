@@ -3,6 +3,7 @@
 # https://realpython.com/python-gui-tkinter/
 # https://realpython.com/inner-functions-what-are-they-good-for/
 # https://realpython.com/intro-to-python-threading/
+# https://www.youtube.com/watch?v=YXPyB4XeYLA
 
 # import psutil
 import tkinter as tk
