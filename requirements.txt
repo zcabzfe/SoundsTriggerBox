@@ -1,0 +1,6 @@
+twilio
+vosk
+pyaudio
+numpy
+noisereduce
+
