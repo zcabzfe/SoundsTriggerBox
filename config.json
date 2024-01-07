@@ -1,0 +1,12 @@
+{
+  "user_made_sounds": {
+    "trigger_words": {
+      "help": "help"
+    },
+    "sound_pattern": {
+      "ee": "  ",
+      "ah": "hello hello hello",
+      "ay": "hey ya hey ya hey ya"
+    }
+  }
+}
