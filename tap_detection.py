@@ -1,3 +1,4 @@
+#https://github.com/xSparfuchs/clap-detection/blob/master/clap-detection.py
 import pyaudio
 import struct
 import math
@@ -102,6 +103,7 @@ class TapTester(object):
             self.noisycount += 1
             print("Noisy block detected. Noisy count:", self.noisycount)
         else:
+            print(f"max tap blocks:{MAX_TAP_BLOCKS}")
             if 1 <= self.noisycount <= MAX_TAP_BLOCKS:
                 self.tapDetected()
             self.noisycount = 0
