@@ -6,4 +6,5 @@ noisereduce
 torch 
 torchvision 
 torchaudio
+levenshtein
 
