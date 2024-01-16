@@ -2,8 +2,9 @@
 import pyaudio
 import struct
 import math
+import time
 
-INITIAL_TAP_THRESHOLD = 0.03
+INITIAL_TAP_THRESHOLD = 0.05
 FORMAT = pyaudio.paInt16 
 SHORT_NORMALIZE = (1.0/32768.0)
 CHANNELS = 1
@@ -16,6 +17,13 @@ OVERSENSITIVE = 15.0/INPUT_BLOCK_TIME
 UNDERSENSITIVE = 120.0/INPUT_BLOCK_TIME 
 # if the noise was longer than this many blocks, it's not a 'tap'
 MAX_TAP_BLOCKS = 0.15/INPUT_BLOCK_TIME
+
+# how many seconds of quiet before we consider the
+# current tap ended, and reset the tap counter
+# How many taps before we consider it a goal
+PERIOD_TIME = 5
+GOAL_TAPS = 5
+
 
 def get_rms( block ):
     # RMS amplitude is defined as the square root of the 
@@ -48,6 +56,8 @@ class TapTester(object):
         self.noisycount = MAX_TAP_BLOCKS + 1
         self.quietcount = 0
         self.errorcount = 0
+        self.start_time = 0
+        self.tap_count = 0
         print("TapTester initialized with tap threshold:", self.tap_threshold)
 
     def stop(self):
@@ -85,11 +95,12 @@ class TapTester(object):
 
     def tapDetected(self):
         print("Tap detected!")
+        
 
     def listen(self):
         try:
             block = self.stream.read(INPUT_FRAMES_PER_BLOCK)
-            print("Reading a block of audio data.")
+            # print("Reading a block of audio data.")
         except Exception as e:
             self.errorcount += 1
             print("({}) Error recording: {}".format(self.errorcount, e))
@@ -97,18 +108,37 @@ class TapTester(object):
             return
 
         amplitude = get_rms(block)
-        print("Amplitude: {:.2f}, Threshold: {:.2f}".format(amplitude, self.tap_threshold))
+        # print("Amplitude: {:.2f}, Threshold: {:.2f}".format(amplitude, self.tap_threshold))
+
+        if time.time() - self.start_time > PERIOD_TIME and self.tap_count > 0:
+            self.tap_count = 0
+            self.start_time = 0
+            print("Tap count reset.")
+
         if amplitude > self.tap_threshold:
             self.quietcount = 0
             self.noisycount += 1
-            print("Noisy block detected. Noisy count:", self.noisycount)
-        else:
-            print(f"max tap blocks:{MAX_TAP_BLOCKS}")
-            if 1 <= self.noisycount <= MAX_TAP_BLOCKS:
+
+            if self.start_time == 0:
+                self.start_time = time.time()
+                print("Start time:", self.start_time)
+
+
+            self.tap_count += 1
+            print("Tap count:", self.tap_count)
+            if self.tap_count >= GOAL_TAPS:
                 self.tapDetected()
+                self.tap_count = 0
+                self.start_time = 0
+                return
+            
+
+            # print("Noisy block detected. Noisy count:", self.noisycount)
+        else:
+            # print(f"max tap blocks:{MAX_TAP_BLOCKS}")
             self.noisycount = 0
             self.quietcount += 1
-            print("Quiet block detected. Quiet count:", self.quietcount)
+            # print("Quiet block detected. Quiet count:", self.quietcount)
 
 
 if __name__ == "__main__":
