@@ -4,7 +4,8 @@ import struct
 import math
 import time
 
-INITIAL_TAP_THRESHOLD = 0.05
+LOWER_TAP_THRESHOLD = 0.1
+UPPER_TAP_THRESHOLD = 0.3  
 FORMAT = pyaudio.paInt16 
 SHORT_NORMALIZE = (1.0/32768.0)
 CHANNELS = 1
@@ -52,13 +53,13 @@ class TapTester(object):
         print("Initializing TapTester...")
         self.pa = pyaudio.PyAudio()
         self.stream = self.open_mic_stream()
-        self.tap_threshold = INITIAL_TAP_THRESHOLD
+        self.lower_tap_threshold = LOWER_TAP_THRESHOLD
+        self.upper_tap_threshold = UPPER_TAP_THRESHOLD
         self.noisycount = MAX_TAP_BLOCKS + 1
         self.quietcount = 0
         self.errorcount = 0
         self.start_time = 0
         self.tap_count = 0
-        print("TapTester initialized with tap threshold:", self.tap_threshold)
 
     def stop(self):
         print("Closing the stream.")
@@ -115,7 +116,7 @@ class TapTester(object):
             self.start_time = 0
             print("Tap count reset.")
 
-        if amplitude > self.tap_threshold:
+        if self.lower_tap_threshold <= amplitude <= self.upper_tap_threshold:
             self.quietcount = 0
             self.noisycount += 1
 
