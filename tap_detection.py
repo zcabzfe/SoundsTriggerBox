@@ -3,6 +3,8 @@ import pyaudio
 import struct
 import math
 import time
+import numpy as np
+import time
 
 LOWER_TAP_THRESHOLD = 0.1
 UPPER_TAP_THRESHOLD = 0.3  
@@ -23,7 +25,7 @@ MAX_TAP_BLOCKS = 0.15/INPUT_BLOCK_TIME
 # current tap ended, and reset the tap counter
 # How many taps before we consider it a goal
 PERIOD_TIME = 5
-GOAL_TAPS = 5
+GOAL_TAPS = 3
 
 
 def get_rms( block ):
@@ -53,13 +55,15 @@ class TapTester(object):
         print("Initializing TapTester...")
         self.pa = pyaudio.PyAudio()
         self.stream = self.open_mic_stream()
-        self.lower_tap_threshold = LOWER_TAP_THRESHOLD
-        self.upper_tap_threshold = UPPER_TAP_THRESHOLD
+        self.lower_tap_threshold = 0
+        self.upper_tap_threshold = 0
         self.noisycount = MAX_TAP_BLOCKS + 1
         self.quietcount = 0
         self.errorcount = 0
         self.start_time = 0
         self.tap_count = 0
+        self.cooldown_end_time = 0
+        self.train_taps()  # Start training process
 
     def stop(self):
         print("Closing the stream.")
@@ -93,9 +97,45 @@ class TapTester(object):
                             frames_per_buffer=INPUT_FRAMES_PER_BLOCK)
         print("Microphone stream opened.")
         return stream
+    
+    def train_taps(self):
+        print("Training mode: you will need to tap 10 times")
+        amplitudes = []
+        # This is the min value that should be accepted as the sound
+        min_tap_amplitude = 0.01 
+
+        # Training for 10 taps
+        print("Tap!!!")
+        while len(amplitudes) < 10:  
+            try:
+                block = self.stream.read(INPUT_FRAMES_PER_BLOCK)
+                amplitude = get_rms(block)
+
+                if amplitude > min_tap_amplitude and time.time() > self.cooldown_end_time:
+                    amplitudes.append(amplitude)
+                    print("Tap registered amplitude: {:.2f}".format(amplitude))       
+                    # Cooldown to avoid echo
+                    self.cooldown_end_time = time.time() + 0.5
+                    print("Tap!!!") 
+
+
+            except Exception as e:
+                print("Error during training: {}".format(e))
+            
+
+        # Calculate mean and standard deviation
+        mean_amplitude = np.mean(amplitudes)
+        std_deviation = np.std(amplitudes)
+
+        # Set the thresholds based on the mean and standard deviation
+        self.lower_tap_threshold = max(mean_amplitude - (std_deviation * 1.5), min_tap_amplitude)
+        self.upper_tap_threshold = mean_amplitude + (std_deviation * 1.5)
+        print("Training complete. Lower threshold: {:.2f}, Upper threshold: {:.2f}".format(
+            self.lower_tap_threshold, self.upper_tap_threshold))
+        print("Detecting taps")
 
     def tapDetected(self):
-        print("Tap detected!")
+        print("3 Taps detected!")
         
 
     def listen(self):
@@ -109,13 +149,12 @@ class TapTester(object):
             return
 
         amplitude = get_rms(block)
-        # print("Amplitude: {:.2f}, Threshold: {:.2f}".format(amplitude, self.tap_threshold))
+        #print("Amplitude: {:.2f}".format(amplitude))
 
         if time.time() - self.start_time > PERIOD_TIME and self.tap_count > 0:
             self.tap_count = 0
             self.start_time = 0
             print("Tap count reset.")
-
         if self.lower_tap_threshold <= amplitude <= self.upper_tap_threshold:
             self.quietcount = 0
             self.noisycount += 1
