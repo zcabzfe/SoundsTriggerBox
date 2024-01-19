@@ -102,7 +102,7 @@ class TapTester(object):
         print("Training mode: you will need to tap 10 times")
         amplitudes = []
         # This is the min value that should be accepted as the sound
-        min_tap_amplitude = 0.01 
+        min_tap_amplitude = 0.05
 
         # Training for 10 taps
         print("Tap!!!")
