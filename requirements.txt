@@ -1,6 +1,10 @@
-twilio
 vosk
 pyaudio
 numpy
 noisereduce
-
+torch 
+torchvision 
+torchaudio
+levenshtein
+sounddevice==0.4.4
+mediapipe==0.10.9
