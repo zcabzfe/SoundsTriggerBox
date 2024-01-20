@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+venv
+audio_classification/.DS_Store
+.DS_Store
